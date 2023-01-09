@@ -4,16 +4,19 @@ import {
 } from "../../src/types/IpcRendererEvents";
 import { BrowserWindow, dialog, ipcMain } from "electron";
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import util from "node:util";
 import path from "node:path";
 import child_process from "node:child_process";
-import imageSize from "image-size";
+import probe from "probe-image-size";
 import {Ref, ref} from "vue";
 
 export const allowUpscaleExtensions = new Set(["jpg", "jpeg", "png"]);
-const sizeOf = util.promisify(imageSize);
 const exec = util.promisify(child_process.exec);
 
+function sizeOf(filePath) {
+  return probe(fsSync.createReadStream(filePath));
+}
 async function upscaleFile(
   e: Electron.IpcMainEvent,
   filepath: string,
@@ -26,7 +29,7 @@ async function upscaleFile(
       return;
     }
 
-    const { height, width, type } = await sizeOf(filepath);
+    const { height, width } = await sizeOf(filepath);
     const scaleHeight = opts.maxResolution.height / height;
     const scaleWidth = opts.maxResolution.width / width;
     const minScale = Math.ceil(Math.min(scaleHeight, scaleWidth));
