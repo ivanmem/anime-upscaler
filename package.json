@@ -18,7 +18,7 @@
     "@types/probe-image-size": "^7.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "electron": "^25.0.1",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "^24.4.0",
     "prettier": "^2.8.1",
     "typescript": "^5.0.3",
     "vite": "^4.0.3",
